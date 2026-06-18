@@ -1,0 +1,108 @@
+LEEME - Manual de NEXUS (presentacion + examen + constancia)
+==============================================================
+
+IMPORTANTE: COMO ABRIR EL SITIO (NO USAR DOBLE CLIC)
+-------------------------------------------------
+Este sitio carga el PDF del manual y la plantilla de la constancia usando
+"fetch", una funcion que los navegadores BLOQUEAN por seguridad cuando el
+sitio se abre con doble clic (protocolo file://). Si lo abres asi, vas a
+ver siempre el mensaje "no se pudo mostrar el manual", sin importar que
+los archivos esten bien colocados.
+
+Tienes que abrirlo a traves de un servidor local. Las opciones mas faciles:
+
+Opcion A) Con Python (si lo tienes instalado):
+  1. Abre una terminal en la carpeta del proyecto (donde esta index.html).
+  2. Ejecuta: python3 -m http.server 8000
+     (en Windows puede ser: python -m http.server 8000)
+  3. Abre tu navegador en: http://localhost:8000
+
+Opcion B) Con la extension "Live Server" de VS Code:
+  1. Abre la carpeta del proyecto en VS Code.
+  2. Clic derecho sobre index.html > "Open with Live Server".
+
+Opcion C) Subiendolo a un hosting real (GitHub Pages, Netlify, tu propio
+servidor, etc.) y accediendo por https://.
+
+Cualquiera de estas opciones funciona; lo unico que NO funciona es abrir
+el archivo index.html directamente con doble clic.
+
+
+ARCHIVOS QUE DEBES AGREGAR EN LA CARPETA assets/
+-------------------------------------------------
+Esta carpeta "assets" viene vacia. Debes copiar ahi tus dos archivos reales:
+
+1. assets/Manual-de-NEXUS.pdf
+   El manual completo de 115 paginas (el que ya tenias).
+
+2. assets/Constancia-Plantilla.pdf
+   La plantilla de la constancia con el diseno fijo y el espacio en blanco
+   donde se debe escribir el nombre del participante.
+
+Sin estos dos archivos el sitio no funcionara (el visor mostrara un mensaje
+de error y la constancia no se podra generar).
+
+
+COMO AJUSTAR LA POSICION DEL NOMBRE EN LA CONSTANCIA
+-----------------------------------------------------
+En app.js busca este bloque cerca del inicio de la seccion de codigo nueva:
+
+    const certificateNameField = {
+      x: 306,
+      y: 312,
+      fontSize: 22,
+      color: { r: 0.05, g: 0.16, b: 0.15 },
+      centerText: true
+    };
+
+Que significa cada valor:
+- x, y: la posicion donde se escribe el nombre, en puntos PDF.
+  El origen (0,0) es la esquina INFERIOR IZQUIERDA de la hoja.
+  Una hoja carta mide 612 x 792 puntos.
+  Si centerText es true, "x" se usa como el CENTRO horizontal del texto
+  (util si el espacio en blanco esta centrado en la hoja).
+- fontSize: tamano de letra del nombre.
+- color: color del texto en formato RGB de 0 a 1 (no de 0 a 255).
+- centerText: true para centrar el nombre sobre x, o false para que x
+  sea el punto donde inicia el texto (alineado a la izquierda).
+
+Como calibrar estos numeros con tu plantilla real:
+1. Sube tu Constancia-Plantilla.pdf real a la carpeta assets/.
+2. Abre el sitio y genera una constancia de prueba con un nombre largo,
+   por ejemplo "Maria Fernanda Gonzalez Rodriguez".
+3. Revisa el PDF descargado: si el nombre queda muy arriba, sube el valor
+   de "y" (incrementa el numero); si queda muy abajo, bajalo (reduce el
+   numero). Si queda desalineado a los lados, ajusta "x".
+4. Repite hasta que quede centrado sobre el espacio en blanco de tu diseno.
+
+Si prefieres que yo calibre las coordenadas exactas por ti, comparte el PDF
+de tu plantilla real y lo ajusto directamente.
+
+
+RESUMEN DE LO QUE SE CORRIGIO Y AGREGO
+-----------------------------------------------------
+1. Visor de PDF: se reemplazo el visor basado en <object data="...#page=N">
+   (que causaba pantallas en negro al avanzar) por un visor con la libreria
+   PDF.js, que dibuja cada pagina en un <canvas> de forma confiable.
+
+2. Constancia: ya no se construye un PDF desde cero con texto generico.
+   Ahora se toma tu plantilla real (Constancia-Plantilla.pdf) y solo se
+   escribe el nombre del participante encima, usando la libreria pdf-lib.
+
+3. Validacion del nombre: solo se permiten letras, espacios y apostrofes,
+   con minimo un nombre y un apellido (dos palabras). Ademas se revisa
+   contra una lista basica de groserias en espanol (con o sin acentos,
+   mayusculas/minusculas). Si el nombre no pasa la validacion, se muestra
+   un mensaje de error y no se puede iniciar el examen.
+
+4. Preguntas del examen: no se modificaron.
+
+5. Calificacion: ya no se hace scroll hacia el indicador de arriba (que
+   daba la sensacion de "regresar al inicio"). Ahora aparece un bloque de
+   "Resultado final" despues de la ultima pregunta, y el boton para
+   descargar la constancia (visible solo si se aprobo) aparece debajo de
+   ese resultado, al final del examen.
+
+Las librerias PDF.js y pdf-lib se cargan desde un CDN publico (cdnjs) en
+index.html, por lo que el sitio necesita conexion a internet para
+funcionar correctamente.

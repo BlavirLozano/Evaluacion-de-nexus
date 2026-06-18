@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manual de NEXUS | Presentacion y examen</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Plataforma NEXUS</p>
+        <h1>Manual de Usuario para el Rol de Maestro</h1>
+      </div>
+      <div class="status-pill" id="courseStatus">Presentacion activa</div>
+    </header>
+
+    <main>
+      <section class="deck-shell" aria-labelledby="deck-title">
+        <div class="deck-toolbar">
+          <div>
+            <h2 id="deck-title">Presentacion</h2>
+            <p id="slideCounter">Diapositiva 1 de 47</p>
+          </div>
+          <div class="deck-actions" aria-label="Controles de presentacion">
+            <button id="prevSlide" type="button" aria-label="Diapositiva anterior">Anterior</button>
+            <button id="nextSlide" type="button" aria-label="Diapositiva siguiente">Siguiente</button>
+          </div>
+        </div>
+
+        <div class="pdf-frame-wrap" id="presentationPanel">
+          <canvas id="pdfViewer" class="pdf-frame"></canvas>
+          <p id="pdfFallback" class="pdf-fallback" hidden>
+            No se pudo mostrar el manual.
+            <a href="assets/Manual-de-NEXUS.pdf" target="_blank" rel="noreferrer">Abrir manual de NEXUS en una pestana nueva</a>
+          </p>
+        </div>
+
+        <div class="last-slide-panel" id="lastSlidePanel" hidden>
+          <p>Has llegado al final de la presentacion. Al iniciar el examen se bloqueara la navegacion del manual.</p>
+          <button id="startExam" class="primary-action" type="button">Iniciar examen</button>
+        </div>
+      </section>
+
+      <section id="examPanel" class="exam-shell" aria-labelledby="exam-title" hidden>
+        <div class="exam-heading">
+          <div>
+            <p class="eyebrow">Evaluacion</p>
+            <h2 id="exam-title">Examen de 10 reactivos</h2>
+            <p id="studentLabel" class="muted"></p>
+          </div>
+          <div id="scoreCard" class="score-card" aria-live="polite">
+            <strong>Sin calificar</strong>
+            <span>Responde todos los reactivos y envia el examen.</span>
+          </div>
+        </div>
+
+        <form id="examForm" class="question-list"></form>
+
+        <div id="finalResultPanel" class="final-result-panel" hidden aria-live="polite">
+          <h3>Resultado final</h3>
+          <div id="finalScoreCard" class="score-card"></div>
+        </div>
+
+        <div id="certificatePanel" class="certificate-panel" hidden>
+          <h3>Constancia disponible</h3>
+          <p>Aprobaste con calificacion mayor a 80. Puedes descargar tu constancia en PDF.</p>
+          <button id="downloadCertificate" class="primary-action" type="button">Descargar constancia PDF</button>
+        </div>
+
+        <div class="submit-row">
+          <button id="gradeExam" class="primary-action" type="submit" form="examForm">Calificar examen</button>
+          <button id="resetExam" type="button">Reiniciar examen</button>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="nameDialog" class="name-dialog">
+      <form id="nameForm">
+        <p class="eyebrow">Antes de comenzar</p>
+        <h2>Nombre para la constancia</h2>
+        <label for="studentName">Escribe tu nombre como quieres que aparezca en la constancia.</label>
+        <input id="studentName" name="studentName" type="text" autocomplete="name" required maxlength="90" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü' ]+">
+        <p id="nameError" class="name-error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button id="cancelName" type="button">Cancelar</button>
+          <button class="primary-action" type="submit">Comenzar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
