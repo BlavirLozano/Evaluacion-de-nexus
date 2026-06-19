@@ -155,6 +155,10 @@ const examQuestions = questions.map((question, index) => {
 
 // === Referencias DOM ===
 const pdfCanvas = document.querySelector("#pdfViewer");
+  pdfCanvas.addEventListener("click", () => {
+  goToSlide(1);
+});
+
 const pdfFallback = document.querySelector("#pdfFallback");
 const slideCounter = document.querySelector("#slideCounter");
 const prevButton = document.querySelector("#prevSlide");
@@ -537,6 +541,25 @@ async function downloadCertificate() {
 // =========================================================================
 prevButton.addEventListener("click", () => goToSlide(-1));
 nextButton.addEventListener("click", () => goToSlide(1));
+
+window.addEventListener("keydown", (event) => {
+  if (examStarted) return;
+
+  const tag = document.activeElement.tagName.toLowerCase();
+
+  if (tag === "input" || tag === "textarea" || tag === "select") return;
+
+  if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") {
+    event.preventDefault();
+    prevButton.click();
+  }
+
+  if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") {
+    event.preventDefault();
+    nextButton.click();
+  }
+});
+
 startExamButton.addEventListener("click", () => {
   studentInput.value = studentName;
   showNameError("");
