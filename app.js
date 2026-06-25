@@ -463,15 +463,6 @@ async function gradeExam(event) {
     }
   }
 
-  // Indicador breve arriba (estado general)...
-  scoreCard.innerHTML = resultHtml;
-  // ...y resultado completo al final del examen, junto al boton de constancia.
-  finalScoreCard.innerHTML = resultHtml;
-  finalResultPanel.hidden = false;
-  certificatePanel.hidden = !passed;
-
-  // El resultado se muestra al final del examen, no se regresa al inicio.
-  finalResultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
 
 function resetExam() {
   examForm.reset();
@@ -479,7 +470,6 @@ function resetExam() {
   lastCorrect = 0;
   examGraded = false;
   finalResultPanel.hidden = true;
-  certificatePanel.hidden = true;
   document.querySelectorAll(".question").forEach(fieldset => {
     fieldset.classList.remove("correct", "incorrect", "unanswered");
     fieldset.querySelector(".feedback").textContent = "";
@@ -489,100 +479,6 @@ function resetExam() {
     <span>Responde todos los reactivos y envia el examen.</span>
   `;
   examPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-// =========================================================================
-// 2) CONSTANCIA: se toma la plantilla PDF y solo se escribe el nombre encima
-// =========================================================================
-async function buildCertificatePdfBytes() {
-  if (!window["PDFLib"]) {
-    throw new Error("La libreria pdf-lib no esta disponible.");
-  }
-  const { PDFDocument, rgb, StandardFonts } = PDFLib;
-
-  const templateBytes = await fetch(certificateTemplatePath).then(response => {
-    if (!response.ok) throw new Error("No se pudo cargar la plantilla de constancia.");
-    return response.arrayBuffer();
-  });
-
-  const pdfDoc = await PDFDocument.load(templateBytes);
-  const page = pdfDoc.getPages()[0];
-  const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-
-  const { x, y, fontSize, color, centerText } = certificateNameField;
-  let drawX = x;
-
-  if (centerText) {
-    const textWidth = font.widthOfTextAtSize(studentName, fontSize);
-    drawX = x - textWidth / 2;
-  }
-
-  page.drawText(studentName, {
-    x: drawX,
-    y,
-    size: fontSize,
-    font,
-    color: rgb(color.r, color.g, color.b)
-  });
-
-  const gradeText = `${lastGrade}/100`;
-    const currentDate = new Date().toLocaleDateString("es-MX", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  });
-
-  page.drawText(gradeText, {
-    x: certificateGradeField.x,
-    y: certificateGradeField.y,
-    size: certificateGradeField.fontSize,
-    font,
-    color: rgb(
-      certificateGradeField.color.r,
-      certificateGradeField.color.g,
-      certificateGradeField.color.b
-    )
-  });
-
-  page.drawText(currentDate, {
-    x: certificateDateField.x,
-    y: certificateDateField.y,
-    size: certificateDateField.fontSize,
-    font,
-    color: rgb(
-      certificateDateField.color.r,
-      certificateDateField.color.g,
-      certificateDateField.color.b
-    )
-  });
-
-  return pdfDoc.save();
-}
-
-async function downloadCertificate() {
-  downloadCertificateButton.disabled = true;
-  const originalLabel = downloadCertificateButton.textContent;
-  downloadCertificateButton.textContent = "Generando...";
-
-  try {
-    const pdfBytes = await buildCertificatePdfBytes();
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    const safeName = studentName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "participante";
-    link.href = url;
-    link.download = `constancia-nexus-${safeName}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("No se pudo generar la constancia:", error);
-    alert("No se pudo generar la constancia. Verifica que el archivo de plantilla este disponible en assets/.");
-  } finally {
-    downloadCertificateButton.disabled = false;
-    downloadCertificateButton.textContent = originalLabel;
-  }
 }
 
 // =========================================================================
@@ -622,7 +518,6 @@ document.querySelector("#cancelName").addEventListener("click", () => {
 nameForm.addEventListener("submit", beginExam);
 examForm.addEventListener("submit", gradeExam);
 resetButton.addEventListener("click", resetExam);
-downloadCertificateButton.addEventListener("click", downloadCertificate);
 
 renderExam();
 loadPdfDocument().then(() => updateSlide());
