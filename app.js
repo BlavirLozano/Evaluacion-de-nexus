@@ -1,6 +1,9 @@
 const totalSlides = 47;
 const pdfPath = "assets/Portada.pdf";
 const passingGrade = 80;
+const supabaseUrl = "https://hcaqiselmayfbcjofmwo.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjYXFpc2VsbWF5ZmJjam9mbXdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMTU3NjEsImV4cCI6MjA5Nzg5MTc2MX0.9YKDn7sWchdoP2ub3jQXucYYNkQ6FQW7hDp-MIFswRE";
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 const questions = [
   {
@@ -138,6 +141,7 @@ let currentSlide = 1;
 let examStarted = false;
 let examGraded = false;
 let studentName = "";
+let employeeNumber = "";
 let lastGrade = 0;
 let lastCorrect = 0;
 
@@ -170,12 +174,11 @@ const examForm = document.querySelector("#examForm");
 const scoreCard = document.querySelector("#scoreCard");
 const finalResultPanel = document.querySelector("#finalResultPanel");
 const finalScoreCard = document.querySelector("#finalScoreCard");
-const certificatePanel = document.querySelector("#certificatePanel");
-const downloadCertificateButton = document.querySelector("#downloadCertificate");
 const resetButton = document.querySelector("#resetExam");
 const nameDialog = document.querySelector("#nameDialog");
 const nameForm = document.querySelector("#nameForm");
 const studentInput = document.querySelector("#studentName");
+const employeeInput = document.querySelector("#employeeNumber");
 const nameError = document.querySelector("#nameError");
 const studentLabel = document.querySelector("#studentLabel");
 const courseStatus = document.querySelector("#courseStatus");
@@ -353,6 +356,13 @@ function renderExam() {
 
 function beginExam(event) {
   event.preventDefault();
+  const employeeValue = employeeInput.value.trim();
+
+  if (!/^\d{5,10}$/.test(employeeValue)) {
+    showNameError("Escribe un número de empleado válido de 5 a 10 dígitos.");
+    employeeInput.focus();
+    return;
+  }
   const result = validateStudentName(studentInput.value);
 
   if (!result.valid) {
@@ -362,6 +372,7 @@ function beginExam(event) {
   }
 
   studentName = result.value;
+  employeeNumber = employeeValue;
   showNameError("");
   examStarted = true;
   examGraded = false;
@@ -377,41 +388,80 @@ function beginExam(event) {
 // =========================================================================
 // 5) CALIFICACION AL FINAL (sin regresar al inicio) + boton de constancia abajo
 // =========================================================================
-function gradeExam(event) {
-  event.preventDefault();
-  let correct = 0;
+async function gradeExam(event) {
+    event.preventDefault();
+    let correct = 0;
 
-  examQuestions.forEach((question, index) => {
-    const fieldset = document.querySelector(`#question-${index}`);
-    const selected = examForm.querySelector(`input[name="q${index}"]:checked`);
-    const feedback = fieldset.querySelector(".feedback");
-    fieldset.classList.remove("correct", "incorrect", "unanswered");
+    examQuestions.forEach((question, index) => {
+      const fieldset = document.querySelector(`#question-${index}`);
+      const selected = examForm.querySelector(`input[name="q${index}"]:checked`);
+      const feedback = fieldset.querySelector(".feedback");
+      fieldset.classList.remove("correct", "incorrect", "unanswered");
 
-    if (!selected) {
-      fieldset.classList.add("unanswered");
-      feedback.textContent = `Sin responder. Respuesta correcta: ${question.options.find(option => option.correct).text}.`;
-      return;
-    }
+      if (!selected) {
+        fieldset.classList.add("unanswered");
+        feedback.textContent = `Sin responder. Respuesta correcta: ${question.options.find(option => option.correct).text}.`;
+        return;
+      }
 
-    if (question.options[Number(selected.value)].correct) {
-      correct += 1;
-      fieldset.classList.add("correct");
-      feedback.textContent = "Correcto.";
+      if (question.options[Number(selected.value)].correct) {
+        correct += 1;
+        fieldset.classList.add("correct");
+        feedback.textContent = "Correcto.";
+      } else {
+        fieldset.classList.add("incorrect");
+        feedback.textContent = `Incorrecto. Respuesta correcta: ${question.options.find(option => option.correct).text}.`;
+      }
+    });
+
+    lastCorrect = correct;
+    lastGrade = Math.round((correct / questions.length) * 100);
+    const passed = lastGrade >= passingGrade;
+    examGraded = true;
+
+    const resultHtml = `
+      <strong>${lastGrade}/100</strong>
+      <span>${correct} de ${questions.length} reactivos correctos. ${passed ? "Curso aprobado." : "Se requiere una calificación mínima de 80 para aprobar."}</span>
+    `;
+
+    scoreCard.innerHTML = resultHtml;
+    finalScoreCard.innerHTML = resultHtml;
+    finalResultPanel.hidden = false;
+
+    if (passed) {
+      const { error } = await supabaseClient
+        .from("cursos_nexus")
+        .insert([{
+          num_empleado: employeeNumber,
+          nombre_profesor: studentName,
+          calificacion: lastGrade,
+          correctas: correct,
+          total_preguntas: questions.length,
+          aprobado: true,
+          fecha: new Date().toLocaleDateString("es-MX")
+        }]);
+
+      if (error) {
+        console.error("Error al guardar curso:", error);
+        alert("Aprobaste el curso, pero no se pudo guardar en la base de datos.");
+        return;
+      }
+
+      alert("Curso terminado y aprobado. Tu resultado fue guardado correctamente.");
+
+      resetExam();
+      examStarted = false;
+      document.body.classList.remove("exam-active");
+      examPanel.hidden = true;
+      finalResultPanel.hidden = true;
+      currentSlide = 1;
+      courseStatus.textContent = "Presentacion activa";
+      updateSlide();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      fieldset.classList.add("incorrect");
-      feedback.textContent = `Incorrecto. Respuesta correcta: ${question.options.find(option => option.correct).text}.`;
+      finalResultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  });
-
-  lastCorrect = correct;
-  lastGrade = Math.round((correct / questions.length) * 100);
-  const passed = lastGrade > passingGrade;
-  examGraded = true;
-
-  const resultHtml = `
-    <strong>${lastGrade}/100</strong>
-    <span>${correct} de ${questions.length} reactivos correctos. ${passed ? "Resultado aprobatorio." : "Se requiere una calificacion mayor a 80 para constancia."}</span>
-  `;
+  }
 
   // Indicador breve arriba (estado general)...
   scoreCard.innerHTML = resultHtml;
@@ -422,7 +472,6 @@ function gradeExam(event) {
 
   // El resultado se muestra al final del examen, no se regresa al inicio.
   finalResultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-}
 
 function resetExam() {
   examForm.reset();

@@ -62,12 +62,6 @@
           <div id="finalScoreCard" class="score-card"></div>
         </div>
 
-        <div id="certificatePanel" class="certificate-panel" hidden>
-          <h3>Constancia disponible</h3>
-          <p>Aprobaste con calificacion mayor a 80. Puedes descargar tu constancia en PDF.</p>
-          <button id="downloadCertificate" class="primary-action" type="button">Descargar constancia PDF</button>
-        </div>
-
         <div class="submit-row">
           <button id="gradeExam" class="primary-action" type="submit" form="examForm">Calificar examen</button>
           <button id="resetExam" type="button">Reiniciar examen</button>
@@ -78,10 +72,11 @@
     <dialog id="nameDialog" class="name-dialog">
       <form id="nameForm">
         <p class="eyebrow">Antes de comenzar</p>
-        <h2>Nombre para la constancia</h2>
-        <label for="studentName">Escribe tu nombre como quieres que aparezca en la constancia.</label>
-        <input id="studentName" name="studentName" type="text" autocomplete="name" required maxlength="90" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü' ]+">
-        <p id="nameError" class="name-error" role="alert" hidden></p>
+        <h2>Nombre del maestro que realiza el examen</h2>
+        <label for="employeeNumber">Número de empleado</label>
+        <input id="employeeNumber" name="employeeNumber" type="text" required maxlength="10" inputmode="numeric">
+        <label for="studentName">Nombre completo del profesor</label>
+        <input id="studentName" name="studentName" type="text" autocomplete="name" required maxlength="90" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü' ]+">        <p id="nameError" class="name-error" role="alert" hidden></p>
         <div class="dialog-actions">
           <button id="cancelName" type="button">Cancelar</button>
           <button class="primary-action" type="submit">Comenzar</button>
@@ -90,7 +85,7 @@
     </dialog>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app.js"></script>
   </body>
 </html>
