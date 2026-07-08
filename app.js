@@ -421,7 +421,7 @@ async function gradeExam(event) {
 
     const resultHtml = `
       <strong>${lastGrade}/100</strong>
-      <span>${correct} de ${questions.length} reactivos correctos. ${passed ? "Curso aprobado." : "Se requiere una calificación mínima de 80 para aprobar."}</span>
+      <span>${correct} de ${questions.length} reactivos correctos. ${passed ? "Curso aprobado." : "Se requiere una calificación mínima de 80 para aprobar y sera necesario volver a realizar el examen"}</span>
     `;
 
     scoreCard.innerHTML = resultHtml;
