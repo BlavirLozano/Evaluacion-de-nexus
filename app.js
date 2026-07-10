@@ -7,104 +7,240 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 const questions = [
   {
-    text: "Que datos se requieren para recuperar una contrasena olvidada?",
+    text: "De acuerdo con los roles de usuario en la plataforma Nexus, ¿cuál es la función principal del rol de *Profesor*?",
     options: [
-      "Nombre de usuario y correo registrado en el sistema.",
-      "Solo el numero de aula.",
-      "La calificacion final del curso.",
-      "El nombre de todos los estudiantes inscritos."
+      "Gestionar los cursos Master de trabajo colegiado y de academia.",
+      "Impartir los cursos asignados para el semestre vigente.",
+      "Acceder únicamente a los cursos de capacitación docente.",
+      "Administrar las cuentas de todos los usuarios de la plataforma."
     ],
-    answer: 0
+    answer: 1  // Opción B
   },
   {
-    text: "Para que sirve la seccion Mi Cuenta?",
+    text: "¿Cuál es una posible causa de que no aparezca mi curso en el Nexus?",
     options: [
-      "Para consultar o modificar informacion personal como correo y contrasena.",
-      "Para publicar automaticamente todos los examenes.",
-      "Para borrar cursos completos sin confirmacion.",
-      "Para sustituir el programa analitico."
+      "El curso está en la siguiente página.",
+      "Los cursos únicamente se muestran después de que el estudiantado realiza su primera actividad.",
+      "El equipo de cómputo debe tener instalada una versión específica de Microsoft Office.",
+      "Es obligatorio descargar la aplicación móvil de Nexus para visualizar los cursos."
     ],
-    answer: 0
+    answer: 0  // Opción A
   },
   {
-    text: "Que funcion cumplen las carpetas en la pagina principal?",
+    text: "Antes de iniciar el semestre, ¿qué acción es recomendable realizar en la portada del curso para informar al estudiantado sobre las expectativas y lineamientos de la asignatura?",
     options: [
-      "Organizar cursos o accesos para localizar informacion de manera mas ordenada.",
-      "Cambiar el idioma del navegador.",
-      "Enviar mensajes privados automaticamente.",
-      "Sustituir los foros de discusion."
+      "Configurar la imagen de portada del curso.",
+      "Redactar el mensaje de bienvenida.",
+      "Agregar los compromisos del curso.",
+      "Editar las fechas de inicio y fin del curso."
     ],
-    answer: 0
+    answer: 2  // Opción C
   },
   {
-    text: "Que informacion contiene el Programa Analitico?",
+    text: "¿En qué apartado de la plataforma Nexus se agregan las fases del programa, las actividades, las evidencias, los recursos y la evaluación del curso?",
     options: [
-      "Bienvenida, datos de identificacion, presentacion, propositos, competencias y estructura del curso.",
-      "Solo el nombre del profesor.",
-      "Un registro de pagos.",
-      "La bitacora de accesos del servidor."
+      "Portada.",
+      "Portafolio.",
+      "Estructura.",
+      "Exámenes."
     ],
-    answer: 0
+    answer: 2  // Opción C
   },
   {
-    text: "En Configuracion, que puede definir el maestro?",
+    text: "Antes de publicarse como disponible en Nexus, todo curso debe contar con la ficha de programa debidamente completada, incluyendo los apartados de documento, datos de identificación, representación gráfica, propósitos, fundamentación y competencias.",
     options: [
-      "Disponibilidad del curso, fechas, modelo, ordenamiento y pagina inicial.",
-      "El sistema operativo del alumno.",
-      "La velocidad de internet de cada participante.",
-      "El diseno fisico del aula."
+      "Verdadero",
+      "Falso"
     ],
-    answer: 0
+    answer: 0  // Verdadero
   },
   {
-    text: "Que permite consultar la vista de Evaluacion?",
+    text: "Al crear una evidencia y ponerla como trabajo en equipo, ¿qué debe hacer el profesor para que el alumno la pueda visualizar?",
     options: [
-      "Detalle de evidencias o elementos complementarios: periodo, valor, criterios, actividad, contenidos y recursos.",
-      "Solo fotografias de perfil.",
-      "La contrasena de alumnos.",
-      "La informacion bancaria del usuario."
+      "Pedirle al alumno que se dé de alta en un equipo de Nexus.",
+      "Crear los equipos en la ficha de estudiantes en Nexus.",
+      "Nada, se hace automáticamente.",
+      "Todas las anteriores."
     ],
-    answer: 0
+    answer: 1  // Opción B
   },
   {
-    text: "Cual es el proposito de los Foros de Discusion?",
+    text: "Toda la información de las guías instruccionales debe capturarse en el apartado de Contenido, dentro de las evidencias y las actividades correspondientes.",
     options: [
-      "Abrir espacios de intercambio donde se pueden consultar, responder o administrar comentarios.",
-      "Guardar contrasenas de acceso.",
-      "Sustituir el calendario del curso.",
-      "Crear reportes financieros."
+      "Verdadero",
+      "Falso"
     ],
-    answer: 0
+    answer: 0  // Verdadero
   },
   {
-    text: "Que permite la herramienta Equipos?",
+    text: "¿Qué requerimos hacer para que los recursos sean visualizados para los estudiantes?",
     options: [
-      "Agregar equipos, editar sus datos, integrar alumnos y elegir representantes.",
-      "Cambiar la version del navegador.",
-      "Enviar calificaciones oficiales al sistema escolar.",
-      "Eliminar todos los documentos del curso."
+      "Dar clic en el botón mostrar a estudiantes.",
+      "Subir dos veces el recurso.",
+      "Solicitar al estudiante que pague su boleta de Rectoría.",
+      "Nada, se hace automáticamente."
     ],
-    answer: 0
+    answer: 0  // Opción A
   },
   {
-    text: "Que acciones se describen para Examenes en NEXUS?",
+    text: "¿Qué acción en la Rúbrica permite definir los niveles de desempeño que se utilizarán para evaluar la actividad?",
     options: [
-      "Agregar, publicar, editar informacion, eliminar, calificar y ver vista previa de examenes.",
-      "Solo cambiar el logotipo institucional.",
-      "Crear carpetas personales fuera del curso.",
-      "Bloquear la recuperacion de contrasenas."
+      "Asignar las Competencias.",
+      "Agregar el Nivel Dominio.",
+      "Agregar los Criterios.",
+      "Adjuntar los Recursos."
     ],
-    answer: 0
+    answer: 1  // Opción B
   },
   {
-    text: "Que son los Bancos de Reactivos?",
+    text: "¿Qué opción en la Rúbrica debe seleccionarse para incorporar un aspecto específico que será evaluado en la rúbrica?",
     options: [
-      "Conjuntos de reactivos que pueden agregarse, editarse, eliminarse, compartirse o importarse a examenes.",
-      "Listas de alumnos sin relacion con evaluaciones.",
-      "Repositorios de imagenes decorativas.",
-      "Calendarios personales del profesor."
+      "Agregar los Criterios.",
+      "Agregar el Nivel de Dominio.",
+      "Asignar las Competencias.",
+      "Contenidos."
     ],
-    answer: 0
+    answer: 0  // Opción A
+  },
+  {
+    text: "¿De qué formas puede el profesor acceder a las evidencias para realizar la evaluación en el apartado *Portafolio*?",
+    options: [
+      "Únicamente seleccionando al estudiante.",
+      "Únicamente seleccionando la fase del curso.",
+      "Seleccionando al estudiante o el elemento evaluable que desea revisar.",
+      "Seleccionando el Programa Analítico del curso."
+    ],
+    answer: 2  // Opción C
+  },
+  {
+    text: "¿Qué debe hacer el docente con el curso al inicio de clases?",
+    options: [
+      "Ocultarlo hasta la primera evaluación.",
+      "Habilitar el curso como \"disponible\".",
+      "Eliminar los contenidos anteriores.",
+      "Restringir el acceso a los estudiantes."
+    ],
+    answer: 1  // Opción B
+  },
+  {
+    text: "Tipo de reactivos que se pueden configurar en un examen en Nexus",
+    options: [
+      "Opción múltiple",
+      "Falso o verdadero",
+      "Relacionar columnas",
+      "Todas las anteriores."
+    ],
+    answer: 3  // Opción D
+  },
+  {
+    text: "Sección de Nexus que permite al profesorado comunicar al estudiantado información relevante o urgente sobre el curso, con la opción de enviar el mensaje también por correo electrónico.",
+    options: [
+      "Glosario",
+      "Bitácora",
+      "Avisos",
+      "Ninguna de las anteriores."
+    ],
+    answer: 2  // Opción C
+  },
+  {
+    text: "¿Es posible aplicar encuestas a través de la plataforma de enseñanza y aprendizaje Nexus?",
+    options: [
+      "Verdadero",
+      "Falso"
+    ],
+    answer: 0  // Verdadero
+  },
+  {
+    text: "Sección de Nexus en el cual podemos propiciar que los estudiantes den su opinión acerca de un tema específico con respeto y tolerancia hacia las opiniones de los demás.",
+    options: [
+      "Foro",
+      "Bitácora",
+      "Encuestas",
+      "Ninguna de las anteriores."
+    ],
+    answer: 0  // Opción A
+  },
+  {
+    text: "Sección de Nexus cuyo objetivo es mantener una comunicación constante con los estudiantes de manera individual o en equipos. Parecido a lo que es el chat de Teams.",
+    options: [
+      "Foro",
+      "Mensajes",
+      "Encuestas",
+      "Glosario"
+    ],
+    answer: 1  // Opción B
+  },
+  {
+    text: "Sección de Nexus en donde solamente el profesor puede agregar conceptos básicos de la unidad de aprendizaje con su respectiva definición.",
+    options: [
+      "Foro",
+      "Mensajes",
+      "Encuestas",
+      "Glosario"
+    ],
+    answer: 3  // Opción D
+  },
+  {
+    text: "En la modalidad no escolarizada, ¿hasta qué semana se evalúa el porcentaje de avance del curso?",
+    options: [
+      "Semana 16.",
+      "Semana 18.",
+      "Semana 20.",
+      "Semana 24."
+    ],
+    answer: 2  // Opción C
+  },
+  {
+    text: "¿Cuál de las siguientes acciones forma parte de los lineamientos para el uso de la plataforma digital Nexus en modalidad escolarizada y no escolarizada?",
+    options: [
+      "No habilitar el curso como \"disponible\"",
+      "Evitar responder mensajes de estudiantes.",
+      "Mantener un trato respetuoso y comunicación efectiva con el estudiantado.",
+      "Limitar la participación en los foros."
+    ],
+    answer: 2  // Opción C
+  },
+  {
+    text: "El tiempo de respuesta máximo es de 72 horas, para responder dudas de los estudiantes a través de mensajes, foros o correos.",
+    options: [
+      "Verdadero",
+      "Falso"
+    ],
+    answer: 0  // Verdadero
+  },
+  {
+    text: "El tiempo máximo para dar retroalimentación a las actividades que los estudiantes suben en su portafolio es hasta el final del semestre.",
+    options: [
+      "Verdadero",
+      "Falso"
+    ],
+    answer: 1  // Falso
+  },
+  {
+    text: "La unidad de aprendizaje Seminario para el desempeño profesional, se califica con AC (Acreditado) o NC (No acreditado).",
+    options: [
+      "Verdadero",
+      "Falso"
+    ],
+    answer: 0  // Verdadero
+  },
+  {
+    text: "Al finalizar el semestre es importante acudir a la Secretaría de Tecnologías de la Información y Educación Digital a firmar su reporte final de asistencia en línea que genera el SIE (Sistema Integral Ejecutivo), por los siguientes motivos:",
+    options: [
+      "Porque se requiere en auditorías de RH",
+      "Porque se requiere para evaluar a los maestros",
+      "Para generar los reportes de estímulos.",
+      "Todas las anteriores."
+    ],
+    answer: 3  // Opción D
+  },
+  {
+    text: "Los elementos requeridos para el diseño de un curso como apoyo a la modalidad escolarizada son: portada, programa y estructura del curso.",
+    options: [
+      "Verdadero",
+      "Falso"
+    ],
+    answer: 0  // Verdadero
   }
 ];
 
