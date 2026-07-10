@@ -73,7 +73,7 @@ const questions = [
     answer: 0  // Verdadero
   },
   {
-    text: "¿Qué requerimos hacer para que los recursos sean visualizados para los estudiantes?",
+    text: "¿Qué requerimos hacer para que los recursos sean visualizados por los estudiantes?",
     options: [
       "Dar clic en el botón mostrar a estudiantes.",
       "Subir dos veces el recurso.",
@@ -123,7 +123,7 @@ const questions = [
     answer: 1  // Opción B
   },
   {
-    text: "Tipo de reactivos que se pueden configurar en un examen en Nexus",
+    text: "Tipo de reactivos que se pueden configurar en un examen en Nexus:",
     options: [
       "Opción múltiple",
       "Falso o verdadero",
