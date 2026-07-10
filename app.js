@@ -7,7 +7,7 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 const questions = [
   {
-    text: "De acuerdo con los roles de usuario en la plataforma Nexus, ¿cuál es la función principal del rol de *Profesor*?",
+    text: "De acuerdo con los roles de usuario en la plataforma Nexus, ¿cuál es la función principal del rol de Profesor?",
     options: [
       "Gestionar los cursos Master de trabajo colegiado y de academia.",
       "Impartir los cursos asignados para el semestre vigente.",
@@ -103,7 +103,7 @@ const questions = [
     answer: 0  // Opción A
   },
   {
-    text: "¿De qué formas puede el profesor acceder a las evidencias para realizar la evaluación en el apartado *Portafolio*?",
+    text: "¿De qué formas puede el profesor acceder a las evidencias para realizar la evaluación en el apartado Portafolio?",
     options: [
       "Únicamente seleccionando al estudiante.",
       "Únicamente seleccionando la fase del curso.",
