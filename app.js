@@ -1,5 +1,5 @@
-const totalSlides = 47;
-const pdfPath = "assets/Portada.pdf";
+const totalSlides = 157;
+const pdfPath = "assets/Curso Nexus como apoyo a la ME y para el MNE.pdf";
 const passingGrade = 80;
 const supabaseUrl = "https://hcaqiselmayfbcjofmwo.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjYXFpc2VsbWF5ZmJjam9mbXdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMTU3NjEsImV4cCI6MjA5Nzg5MTc2MX0.9YKDn7sWchdoP2ub3jQXucYYNkQ6FQW7hDp-MIFswRE";
